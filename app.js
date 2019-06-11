@@ -21,7 +21,6 @@ function addTask(event) {
     if(taskInput.value === '') {
         alert('Add a task');
     }
-
     // Create li element 
     const li = document.createElement('li');
     // Add a class
