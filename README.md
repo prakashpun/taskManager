@@ -7,9 +7,9 @@ The purpose of the project was to try different ways of DOM manipulations and wh
 https://prakashpun.github.io/taskManager/
 
 The project uses: 
- - https://materializecss.com/ for styling.
- - https://fontawesome.com/ for icons
- - Although, https://code.jquery.com/ is not used directly within the application, it is needed for materialize.css to function.
+ - [Materialize CSS](https://materializecss.com/) for styling.
+ - [Font Awesome](https://fontawesome.com/) for icons
+ - Although, [jQuery](https://code.jquery.com/) is not used directly within the application, it is needed for materialize.css to function.
 
 
 # Screenshot:
