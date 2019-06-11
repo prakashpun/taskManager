@@ -10,12 +10,17 @@ loadEventListeners();
 
 //Load all event listeners
 function loadEventListeners() {
-    //Add task event
-
+    // Add task event
     form.addEventListener('submit', addTask);
+
+    // Remove task event
+    taskList.addEventListener('click', removeTask);
+    
+    // Clear Tasks event
+    clearBtn.addEventListener('click', clearTasks);
 }
 
-//Add Task
+// Add Task
 function addTask(event) {
 
     if(taskInput.value === '') {
@@ -44,4 +49,25 @@ function addTask(event) {
 
     // To prevent the default behavior of form to submit the data 
     event.preventDefault();
+}
+
+// Remove Task
+function removeTask(event) {
+
+    if(event.target.parentElement.classList.contains('delete-item')) {
+        if( confirm('Are you sure you wan to remove this task ?') ){
+            event.target.parentElement.parentElement.remove();               
+        }
+    }
+}
+
+// Clear all tasks 
+function clearTasks(event) {
+    // Slower way
+    // taskList.innerHTML = '';
+
+    // Faster way : Follow for more details here : https://jsperf.com/innerhtml-vs-removechild/47
+    while(taskList.firstChild) {
+        taskList.removeChild(taskList.firstChild);
+    }
 }
