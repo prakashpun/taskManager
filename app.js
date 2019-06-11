@@ -10,6 +10,11 @@ loadEventListeners();
 
 //Load all event listeners
 function loadEventListeners() {
+
+    // DOM load event
+    document.addEventListener('DOMContentLoaded', getTasks);
+
+
     // Add task event
     form.addEventListener('submit', addTask);
 
@@ -22,6 +27,40 @@ function loadEventListeners() {
     // Filter tasks event
     filter.addEventListener('keyup', filterTasks);
 }
+
+// Get Tasks from localStorage
+function getTasks() {
+    let tasks;
+
+    // Check if any tasks stored in localStorage
+    if(localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        // Parse the value to JSON from localStorage, since it stores data as string only  
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+
+    tasks.forEach(function(task) {
+        // Create li element 
+        const li = document.createElement('li');
+        // Add a class
+        li.className = 'collection-item';
+        // Create textNode and append to li
+        li.appendChild(document.createTextNode(task));
+        // Create new element
+        const link = document.createElement('a');
+        // Add class
+        link.className = 'delete-item secondary-content';
+        // Add icon html
+        link.innerHTML = '<i class="fa fa-remove"></i>';
+        // Append the link to li
+        li.appendChild(link);
+        // Append li to ul
+        taskList.appendChild(li);
+    })
+
+}
+
 
 // Add Task
 function addTask(event) {
@@ -47,6 +86,10 @@ function addTask(event) {
     // Append li to ul
     taskList.appendChild(li);
 
+    // Store to local storage 
+    storeTaskInLocalStorage(taskInput.value);
+
+
     // Clear input
     taskInput.value = '';
 
@@ -54,14 +97,57 @@ function addTask(event) {
     event.preventDefault();
 }
 
+// Store task to local storage for data persistence
+function storeTaskInLocalStorage(task) {
+    let tasks;
+
+    // Check if any tasks stored in localStorage
+    if(localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        // Parse the value to JSON from localStorage, since it stores data as string only  
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+
+    // Push new task to the list 
+    tasks.push(task);
+
+    // Save the new list of tasks back to localstorage as a string.
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+}
+
 // Remove Task
 function removeTask(event) {
 
     if(event.target.parentElement.classList.contains('delete-item')) {
         if( confirm('Are you sure you wan to remove this task ?') ){
-            event.target.parentElement.parentElement.remove();               
+            event.target.parentElement.parentElement.remove();   
+            
+            // Remove from localStorage
+            removeTaskFromLocalStorage(event.target.parentElement.parentElement);
         }
     }
+}
+
+// Remove task from locastorage
+function removeTaskFromLocalStorage(taskItem) {
+    let tasks;
+    // Check if any tasks stored in localStorage
+    if(localStorage.getItem('tasks') === null) {
+        tasks = [];
+    } else {
+        // Parse the value to JSON from localStorage, since it stores data as string only  
+        tasks = JSON.parse(localStorage.getItem('tasks'));
+    }
+
+    // Check id task is same then remove from the list
+    tasks.forEach(function(task, index) {
+        if(taskItem.textContent === task) {
+            tasks.splice(index, 1);
+        }
+    });
+
+    localStorage.setItem('tasks', JSON.stringify(tasks));
 }
 
 // Clear all tasks 
@@ -73,6 +159,14 @@ function clearTasks(event) {
     while(taskList.firstChild) {
         taskList.removeChild(taskList.firstChild);
     }
+
+    // Remove tasks from local storage
+    clearTasksFromLocalStorage();
+}
+
+// Clear All Tasks from local storage
+function clearTasksFromLocalStorage() {
+    localStorage.clear();
 }
 
 // Filter tasks
