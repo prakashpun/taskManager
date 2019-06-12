@@ -67,31 +67,33 @@ function addTask(event) {
 
     if(taskInput.value === '') {
         alert('Add a task');
+    } else {
+        // Create li element 
+        const li = document.createElement('li');
+        // Add a class
+        li.className = 'collection-item';
+        // Create textNode and append to li
+        li.appendChild(document.createTextNode(taskInput.value));
+        // Create new element
+        const link = document.createElement('a');
+        // Add class
+        link.className = 'delete-item secondary-content';
+        // Add icon html
+        link.innerHTML = '<i class="fa fa-remove"></i>';
+        // Append the link to li
+        li.appendChild(link);
+
+        // Append li to ul
+        taskList.appendChild(li);
+
+        // Store to local storage 
+        storeTaskInLocalStorage(taskInput.value);
+
+
+        // Clear input
+        taskInput.value = '';
     }
-    // Create li element 
-    const li = document.createElement('li');
-    // Add a class
-    li.className = 'collection-item';
-    // Create textNode and append to li
-    li.appendChild(document.createTextNode(taskInput.value));
-    // Create new element
-    const link = document.createElement('a');
-    // Add class
-    link.className = 'delete-item secondary-content';
-    // Add icon html
-    link.innerHTML = '<i class="fa fa-remove"></i>';
-    // Append the link to li
-    li.appendChild(link);
-
-    // Append li to ul
-    taskList.appendChild(li);
-
-    // Store to local storage 
-    storeTaskInLocalStorage(taskInput.value);
-
-
-    // Clear input
-    taskInput.value = '';
+    
 
     // To prevent the default behavior of form to submit the data 
     event.preventDefault();
